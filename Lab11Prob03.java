@@ -42,6 +42,14 @@ public class Lab11Prob03 {
         // Sort the ArrayList
         Collections.sort(persons);
 
+        try (PrintWriter writer = new PrintWriter("people-salary-sorted.dat")) {
+            for (Person person : persons) {
+                writer.println(person.toString());
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        
         // Write Person information to a binary file
         try ( // Create an output stream for people-salary-sorted-objects.dat
                 ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("people-salary-sorted-objects.dat"));) {
@@ -55,7 +63,7 @@ public class Lab11Prob03 {
     }
 }
 
-class Person implements Serializable, Comparable<Person> {
+class Person implements Serializable, Comparable<Object> {
 
     // Data Members
     int age;
@@ -125,11 +133,10 @@ class Person implements Serializable, Comparable<Person> {
     }
 
     // comparable interface
-    @Override
-    public int compareTo(Person p) {
-        if (getSalary() > p.getSalary()) {
+    public int compareTo(Object p) {
+        if (this.getSalary() > ((Person)p).getSalary()) {
             return 1;
-        } else if (getSalary() < p.getSalary()) {
+        } else if (getSalary() < ((Person)p).getSalary()) {
             return -1;
         } else {
             return 0;
